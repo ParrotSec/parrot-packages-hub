@@ -2,21 +2,21 @@ version: '3'
 services:
   filter:
     build: ./packages-filter
-    command: go run ./main.go
+    command: sh -c "go run ./main.go"
     volumes:
-      - "packages-filter:/app/packages-filter"
+      - "packages-filter:/go/src/packages-filter"
 
   api:
     build: ./packages-api
-    command: go run ./main.go
     ports:
       - "8080:8080"
     volumes:
-      - "packages-filter:/app/packages-filter"
-      - "packages-api:/app/packages-api"
+      - "packages-filter:/go/src/packages-filter"
+      - "packages-api:/go/src/packages-api"
     depends_on:
-      - filter
-    entrypoint: sh -c "cp -r /app/packages-filter/json /app/packages-api/ && go run ./main.go"
+      filter:
+        condition: service_completed_successfully
+    command: sh -c "cp -r /go/src/packages-filter/json /go/src/packages-api/ && go run ./main.go"
 
 volumes:
   packages-filter:
