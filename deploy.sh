@@ -1,8 +1,10 @@
 #!/bin/bash
 
+username=danterolle
+
 # Clone the two repositories
-git clone https://github.com/danterolle/packages-filter.git
-git clone https://github.com/danterolle/packages-api.git
+git clone https://github.com/$username/packages-filter.git
+git clone https://github.com/$username/packages-api.git
 
 # Build the Go applications
 cd packages-filter/ && go build -o packages-filter
