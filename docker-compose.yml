@@ -1,0 +1,23 @@
+version: '3'
+services:
+  filter:
+    build: ./packages-filter
+    command: go run ./main.go
+    volumes:
+      - "packages-filter:/app/packages-filter"
+
+  api:
+    build: ./packages-api
+    command: go run ./main.go
+    ports:
+      - "8080:8080"
+    volumes:
+      - "packages-filter:/app/packages-filter"
+      - "packages-api:/app/packages-api"
+    depends_on:
+      - filter
+    entrypoint: sh -c "cp -r /app/packages-filter/json /app/packages-api/ && go run ./main.go"
+
+volumes:
+  packages-filter:
+  packages-api:
